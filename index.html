@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Willst du meine Frau sein?</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin-top: 50px;
+      background: #fff0f6;
+      overflow: hidden;
+    }
+    img {
+      width: 250px;
+      margin-bottom: 20px;
+    }
+    h1 {
+      font-size: 2em;
+      margin-bottom: 30px;
+    }
+    .buttons {
+      margin-top: 20px;
+    }
+    button {
+      font-size: 20px;
+      padding: 15px 30px;
+      margin: 20px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: absolute;
+    }
+    #yes {
+      background: #4CAF50;
+      color: white;
+      left: 40%;
+      top: 70%;
+    }
+    #no {
+      background: #f44336;
+      color: white;
+      left: 55%;
+      top: 70%;
+    }
+  </style>
+</head>
+<body>
+  <!-- Dein lokales GIF -->
+  <img src="Bubu&Dudu.gif" alt="Bubu & Dudu">
+
+  <!-- Text -->
+  <h1>Willst du meine Frau sein?</h1>
+
+  <!-- Buttons -->
+  <div class="buttons">
+    <button id="yes">Ja</button>
+    <button id="no">Nein</button>
+  </div>
+
+  <script>
+    const noBtn = document.getElementById("no");
+    const yesBtn = document.getElementById("yes");
+
+    // Button "Nein" flieht bei Hover
+    noBtn.addEventListener("mouseenter", () => {
+      const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
+      const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+      noBtn.style.left = x + "px";
+      noBtn.style.top = y + "px";
+    });
+
+    // Wenn man Ja klickt
+    yesBtn.addEventListener("click", () => {
+      document.body.innerHTML = `
+        <h1 style="font-size:3em;">Yeahhh 🎉</h1>
+        <canvas id="confetti"></canvas>
+      `;
+
+      // Konfetti-Effekt
+      const canvas = document.getElementById("confetti");
+      const ctx = canvas.getContext("2d");
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      const confetti = [];
+      for (let i = 0; i < 200; i++) {
+        confetti.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height - canvas.height,
+          r: Math.random() * 6 + 2,
+          d: Math.random() * 10 + 5,
+          color: "hsl(" + Math.random() * 360 + ",100%,50%)",
+        });
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        confetti.forEach((c) => {
+          ctx.beginPath();
+          ctx.arc(c.x, c.y, c.r, 0, Math.PI * 2, false);
+          ctx.fillStyle = c.color;
+          ctx.fill();
+        });
+        update();
+      }
+
+      function update() {
+        confetti.forEach((c) => {
+          c.y += Math.cos(c.d) + 1 + c.r / 2;
+          c.x += Math.sin(c.d);
+          if (c.y > canvas.height) {
+            c.y = -10;
+            c.x = Math.random() * canvas.width;
+          }
+        });
+      }
+
+      setInterval(draw, 20);
+    });
+  </script>
+</body>
+</html>
+
